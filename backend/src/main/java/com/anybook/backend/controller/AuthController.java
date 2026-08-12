@@ -6,6 +6,7 @@ import com.anybook.backend.dto.OwnerSignupRequest;
 import com.anybook.backend.dto.UserResponse;
 import com.anybook.backend.entity.User;
 import com.anybook.backend.repository.UserRepository;
+import com.anybook.backend.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -29,6 +33,9 @@ public class AuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @PostMapping("/signup/client")
     public ResponseEntity<?> signupClient(@RequestBody ClientSignupRequest request){
@@ -58,7 +65,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup/owner")
-    public  ResponseEntity<?> signupOwner(@RequestBody OwnerSignupRequest request){
+    public ResponseEntity<?> signupOwner(@RequestBody OwnerSignupRequest request){
         if(userRepository.findByEmail(request.getEmail()).isPresent() || userRepository.findByMobileNo(request.getBusinessPhoneNumber()).isPresent()){
             return ResponseEntity.badRequest().body("Email already registered");
         }
@@ -100,7 +107,9 @@ public class AuthController {
                 ? userRepository.findByEmail(identifier).orElseThrow()
                 : userRepository.findByMobileNo(identifier).orElseThrow();
 
-        UserResponse response = new UserResponse(
+        String token = jwtUtil.generateToken(identifier);
+
+        UserResponse userResponse = new UserResponse(
                 user.getId().toString(),
                 user.getName(),
                 user.getEmail(),
@@ -108,7 +117,10 @@ public class AuthController {
                 user.getRole().name()
         );
 
-        return ResponseEntity.ok(response);
+        Map<String, Object> response = new HashMap<>();
+        response.put("token", token);
+        response.put("user", userResponse);
 
+        return ResponseEntity.ok(response);
     }
 }
