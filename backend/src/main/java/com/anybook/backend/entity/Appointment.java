@@ -7,18 +7,24 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "services")
+import java.time.LocalDateTime;
+
+@Document(collection = "appointments")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Service {
+public class Appointment {
 
     @Id
     private ObjectId id;
-
+    private String clientId;
     private String ownerId;
-    private String name;
-    private String description;
-    private double price;
-    private int durationMinutes;
+    private String serviceId;
+    private LocalDateTime dateTime;
+    private Status status;
+    private LocalDateTime createdAt;
+
+    public enum Status {
+        PENDING, CONFIRMED, CANCELLED, COMPLETED
+    }
 }
