@@ -1,6 +1,5 @@
 package com.anybook.backend.entity;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +23,7 @@ public class User {
     private String password;
     private String mobileNo;
     private Role role;
+    private String businessName;
 
     public enum Role {
         CLIENT, OWNER

@@ -28,8 +28,10 @@ public class UserController {
                 user.getName(),
                 user.getEmail(),
                 user.getMobileNo(),
-                user.getRole().toString()
+                user.getRole().toString(),
+                user.getBusinessName()
         );
+
         return ResponseEntity.ok(response);
     }
 }
