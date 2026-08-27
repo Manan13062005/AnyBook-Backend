@@ -24,6 +24,8 @@ public class User {
     private String mobileNo;
     private Role role;
     private String businessName;
+    private String businessDescription;
+    private String businessAddress;
 
     public enum Role {
         CLIENT, OWNER

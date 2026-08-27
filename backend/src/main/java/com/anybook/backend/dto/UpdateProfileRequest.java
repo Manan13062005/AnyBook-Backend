@@ -3,12 +3,9 @@ package com.anybook.backend.dto;
 import lombok.Data;
 
 @Data
-public class OwnerSignupRequest {
+public class UpdateProfileRequest {
     private String name;
     private String businessName;
     private String businessDescription;
     private String businessAddress;
-    private String businessPhoneNumber;
-    private String email;
-    private String password;
 }

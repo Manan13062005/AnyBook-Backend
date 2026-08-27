@@ -15,4 +15,6 @@ public class UserResponse {
     private String mobileNo;
     private String role;
     private String businessName;
+    private String businessDescription;
+    private String businessAddress;
 }

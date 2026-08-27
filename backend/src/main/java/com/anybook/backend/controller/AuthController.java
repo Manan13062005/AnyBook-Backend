@@ -59,7 +59,9 @@ public class AuthController {
                 savedUser.getEmail(),
                 savedUser.getMobileNo(),
                 savedUser.getRole().name(),
-                savedUser.getBusinessName()
+                savedUser.getBusinessName(),
+                savedUser.getBusinessDescription(),
+                savedUser.getBusinessAddress()
         );
 
         return ResponseEntity.ok(response);
@@ -75,6 +77,8 @@ public class AuthController {
         user.setMobileNo(request.getBusinessPhoneNumber());
         user.setEmail(request.getEmail());
         user.setBusinessName(request.getBusinessName());
+        user.setBusinessDescription(request.getBusinessDescription());
+        user.setBusinessAddress(request.getBusinessAddress());
 
         user.setRole(User.Role.OWNER);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -86,7 +90,9 @@ public class AuthController {
                 savedUser.getEmail(),
                 savedUser.getMobileNo(),
                 savedUser.getRole().name(),
-                savedUser.getBusinessName()
+                savedUser.getBusinessName(),
+                savedUser.getBusinessDescription(),
+                savedUser.getBusinessAddress()
         );
 
         return ResponseEntity.ok(response);
@@ -118,7 +124,9 @@ public class AuthController {
                 user.getEmail(),
                 user.getMobileNo(),
                 user.getRole().name(),
-                user.getBusinessName()
+                user.getBusinessName(),
+                user.getBusinessDescription(),
+                user.getBusinessAddress()
         );
 
         Map<String, Object> response = new HashMap<>();
