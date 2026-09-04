@@ -26,6 +26,8 @@ public class User {
     private String businessName;
     private String businessDescription;
     private String businessAddress;
+    private String businessHours;
+    private Integer businessImageCount;
 
     public enum Role {
         CLIENT, OWNER

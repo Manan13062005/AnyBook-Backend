@@ -61,7 +61,9 @@ public class AuthController {
                 savedUser.getRole().name(),
                 savedUser.getBusinessName(),
                 savedUser.getBusinessDescription(),
-                savedUser.getBusinessAddress()
+                savedUser.getBusinessAddress(),
+                savedUser.getBusinessHours(),
+                savedUser.getBusinessImageCount()
         );
 
         return ResponseEntity.ok(response);
@@ -92,7 +94,9 @@ public class AuthController {
                 savedUser.getRole().name(),
                 savedUser.getBusinessName(),
                 savedUser.getBusinessDescription(),
-                savedUser.getBusinessAddress()
+                savedUser.getBusinessAddress(),
+                savedUser.getBusinessHours(),
+                savedUser.getBusinessImageCount()
         );
 
         return ResponseEntity.ok(response);
@@ -126,7 +130,9 @@ public class AuthController {
                 user.getRole().name(),
                 user.getBusinessName(),
                 user.getBusinessDescription(),
-                user.getBusinessAddress()
+                user.getBusinessAddress(),
+                user.getBusinessHours(),
+                user.getBusinessImageCount()
         );
 
         Map<String, Object> response = new HashMap<>();
