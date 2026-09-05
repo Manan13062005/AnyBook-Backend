@@ -8,6 +8,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tools.jackson.databind.annotation.JsonSerialize;
 import tools.jackson.databind.ser.std.ToStringSerializer;
+import java.util.ArrayList;
+import java.util.List;
 
 @Document(collection = "users")
 @Data
@@ -28,6 +30,7 @@ public class User {
     private String businessAddress;
     private String businessHours;
     private Integer businessImageCount;
+    private List<String> businessImageIds = new ArrayList<>();
 
     public enum Role {
         CLIENT, OWNER
