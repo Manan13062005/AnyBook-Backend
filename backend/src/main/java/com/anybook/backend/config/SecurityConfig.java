@@ -41,7 +41,8 @@ public class SecurityConfig {
                                 "/auth/signup/**",
                                 "/auth/login",
                                 "/services/owner/**",
-                                "/owners"
+                                "/owners",
+                                "/health"
                         ).permitAll()
                         .requestMatchers(HttpMethod.GET, "/users/**").permitAll()
                         .anyRequest().authenticated()
