@@ -149,4 +149,32 @@ public class BusinessImageController {
                 .contentType(mediaType)
                 .body(resource);
     }
+
+    @DeleteMapping("/{userId}/images/{imageId}")
+    public ResponseEntity<?> deleteImage(
+            @PathVariable String userId,
+            @PathVariable String imageId
+    ) {
+
+        User user = userRepository.findById(new ObjectId(userId))
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!user.getBusinessImageIds().contains(imageId)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        gridFsTemplate.delete(
+                Query.query(
+                        Criteria.where("_id").is(new ObjectId(imageId))
+                )
+        );
+
+        user.getBusinessImageIds().remove(imageId);
+        user.setBusinessImageCount(user.getBusinessImageIds().size());
+        userRepository.save(user);
+
+        return ResponseEntity.ok("Image deleted successfully");
+    }
+
+
 }
