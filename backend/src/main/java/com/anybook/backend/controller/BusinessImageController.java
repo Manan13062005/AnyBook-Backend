@@ -28,6 +28,39 @@ public class BusinessImageController {
     @Autowired
     private UserRepository userRepository;
 
+    @PostMapping("/{userId}/profile-image")
+    public ResponseEntity<?> uploadProfileImage(
+            @PathVariable String userId,
+            @RequestParam("image") MultipartFile image
+    ) throws IOException {
+
+        User user = userRepository.findById(new ObjectId(userId))
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (user.getProfileImageId() != null) {
+            try {
+                gridFsTemplate.delete(
+                        Query.query(
+                                Criteria.where("_id")
+                                        .is(new ObjectId(user.getProfileImageId()))
+                        )
+                );
+            } catch (Exception ignored) {
+            }
+        }
+
+        ObjectId imageId = gridFsTemplate.store(
+                image.getInputStream(),
+                image.getOriginalFilename(),
+                image.getContentType()
+        );
+
+        user.setProfileImageId(imageId.toString());
+        userRepository.save(user);
+
+        return ResponseEntity.ok(imageId.toString());
+    }
+
     @PostMapping("/{userId}/images")
     public ResponseEntity<?> uploadImage(
             @PathVariable String userId,
@@ -50,6 +83,21 @@ public class BusinessImageController {
         return ResponseEntity.ok(imageId.toString());
     }
 
+    @GetMapping("/{userId}/profile-image")
+    public ResponseEntity<Resource> getProfileImage(
+            @PathVariable String userId
+    ) {
+
+        User user = userRepository.findById(new ObjectId(userId))
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (user.getProfileImageId() == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return getImageResource(user.getProfileImageId());
+    }
+
     @GetMapping("/{userId}/images")
     public ResponseEntity<List<String>> getImageIds(
             @PathVariable String userId
@@ -70,13 +118,20 @@ public class BusinessImageController {
         User user = userRepository.findById(new ObjectId(userId))
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (!user.getBusinessImageIds().contains(imageId)) {
+        if (!user.getBusinessImageIds().contains(imageId)
+                && !imageId.equals(user.getProfileImageId())) {
             return ResponseEntity.notFound().build();
         }
 
+        return getImageResource(imageId);
+    }
+
+    private ResponseEntity<Resource> getImageResource(String imageId) {
+
         GridFSFile file = gridFsTemplate.findOne(
                 Query.query(
-                        Criteria.where("_id").is(new ObjectId(imageId))
+                        Criteria.where("_id")
+                                .is(new ObjectId(imageId))
                 )
         );
 
